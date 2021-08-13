@@ -71,8 +71,19 @@ body{
 }
 
 .mid-section p{
-    margin-bottom: 3rem;
+    margin-top: 1rem;
+    margin-bottom: .25rem;
     color: #222222;
+}
+
+#plz-full-screen{
+    margin: 0 0 .25rem 0;
+}
+
+#test-info{
+    margin: 0 0 1.5rem 0;
+    font-size: .75rem;
+    color: #a9abb7; 
 }
 
 .mid-section form{

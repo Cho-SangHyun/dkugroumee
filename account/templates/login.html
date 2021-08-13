@@ -15,6 +15,8 @@
             </div>
             <div class="mid-section">
                 <p>그루미를 통해 효율적인 일정관리를 시작해보세요</p>
+                <p id="plz-full-screen"><strong>전체화면</strong>으로 이용하실 것을 권장합니다!</p>
+                <p id="test-info">(테스트 계정 : id = test, pw = a123456789)</p>
                 <form action="{% url 'login' %}" method="POST">{%csrf_token%}
                     <div class="form-element">
                         {{form.username}}
