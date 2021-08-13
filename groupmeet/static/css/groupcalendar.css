@@ -782,6 +782,22 @@ body {
   color: #838de9 !important;
 }
 
+.profile_img{
+  display: inline;
+  width:40px;
+  height:40px;
+  border-radius: 50%;
+  background: #f1f4ff;
+  margin-right:10px;
+}
+
+.fa-user{
+  border-radius: 50%;
+  padding:10px;
+  background: #f1f4ff;
+  color:#4555e6;
+  margin-right:10px;
+}
 /* .group-name > i{
     border-radius: 50%;
     background:#ffffff;

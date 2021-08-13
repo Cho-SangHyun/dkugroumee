@@ -159,7 +159,7 @@
                     {% if not comment.writer.profile or comment.writer.profile.url == '/media/False'%}
                     <i class="fas fa-user"></i>
                     {% else %}
-                    <img class="profile_img" style="width:35px; height:35px; border-radius:50%;" src="{{comment.writer.profile.url}}" alt="">
+                    <img class="profile_img" src="{{comment.writer.profile.url}}" alt="">
                     {% endif %}
                     <div class="chat-message">
                       <h5>{{comment.writer.nickname}}</h5>
