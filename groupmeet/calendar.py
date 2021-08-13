@@ -34,7 +34,7 @@ class Calendar(HTMLCalendar):
             group_schedules = GroupSchedule.objects.filter(group=group, start__date__lte=date, end__date__gte=date) # 이 그룹의 그룹스케줄 중 이 날 있는 스케줄들을 담음
             all_members_schedules = []            # 그룹의 모든 구성원들의 개인스케줄들 중에서, 이 날에 있는 스케줄들만 담을 리스트
             for member in group.members.all():
-                ug = UserGroup(user=member)
+                ug = UserGroup.objects.get(user=member, group=group)
                 if ug.allowed == 2:
                     member_schedule = Schedule.objects.filter(user=member, start__date__lte=date, end__date__gte=date) # 시작일이 date보다 작거나 같고, 종료일에 date보다 크거나 같은 애들 필터링
                     member_schedule = member_schedule.exclude(end__lte=min_datetime)                                   # 그 중에서 date날짜의 9시 전에 끝나는 일정 제외
