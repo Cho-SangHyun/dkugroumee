@@ -62,7 +62,7 @@ $(document).ready(function(){
     $("#cur_day").text(day);                         // 사이드바의 날짜로 한다. 즉 클릭한 날짜가 사이드바에 표시되게 됨
 
     let date = new Date(cur_year + '-' + cur_month + '-' + day);                 // 클릭한 날짜
-    let week = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAT"];
+    let week = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
     $("#cur_weekday").text(week[date.getDay()]);                                 // 클릭한 날짜의 요일 영어로 해서 
 
     let param = {                                    // 클릭한 날짜의 년/월/일을 객체형태로. 얘를 ajax통신에 사용할 것임
