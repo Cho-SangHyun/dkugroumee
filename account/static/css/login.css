@@ -50,7 +50,7 @@ body{
 }
 
 .mid-section{
-    height: 50%;
+    height: 60%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -58,7 +58,7 @@ body{
 }
 
 .bot-section{
-    height: 25%;
+    height: 15%;
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -81,7 +81,7 @@ body{
 }
 
 #test-info{
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1.25rem 0;
     font-size: .75rem;
     color: #a9abb7; 
 }
@@ -137,7 +137,7 @@ body{
 }
 
 .mid-section .go-to-signup{
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     color: #222222;
 }
 
