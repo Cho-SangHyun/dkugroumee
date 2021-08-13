@@ -28,7 +28,7 @@ class Calendar(HTMLCalendar):
     def formatday(self, day, group):
         if day != 0:
             date = datetime.date(self.year, self.month, day)  # 날짜(ex: 2021-07-26)
-            min_end_time = datetime.time(9, 0, 0)         # 오전 09:00:00 객체(시간객체)
+            min_end_time = datetime.time(7, 0, 0)         # 오전 09:00:00 객체(시간객체)
             min_datetime = datetime.datetime.combine(date, min_end_time) #날짜와 시간을 결합한 객체 (ex : 2021-07-26 09:00:00)
 
             group_schedules = GroupSchedule.objects.filter(group=group, start__date__lte=date, end__date__gte=date) # 이 그룹의 그룹스케줄 중 이 날 있는 스케줄들을 담음
