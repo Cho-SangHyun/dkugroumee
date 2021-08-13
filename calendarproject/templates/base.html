@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+  {%load static%}
+
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href='{% static "css/base.css" %}' />
+    {% block extrahead %} {% endblock %}
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;400;700&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/6584921572.js" crossorigin="anonymous"></script>
+
+    <style>
+      a:link {
+        text-decoration-line: none;
+        color: #ede7f6;
+      }
+
+      a:visited {
+        text-decoration-line: none;
+        color: #ede7f6;
+      }
+
+      a:hover {
+        text-decoration-line: none;
+        color: #ede7f6;
+      }
+
+      .table-content th {
+        width: 35%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="nav_logo">
+        {% if user.is_authenticated %}
+        <a href="{% url 'userCalendar_view' %}"><i class="fas fa-cloud"></i>Groumee</a>
+        {% endif %} {% if not user.is_authenticated %}
+        <a href="{% url 'login' %}">Groumee</a>
+        {% endif %}
+      </div>
+
+      <div class="profile">
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">
+          <span class="profile">Logout</span>
+        </a>
+        <a href="{% url 'getuserGroupList' %}">
+          <span class="profile">Group</span>
+        </a>
+        <span class="profile icon" id="bell"><i class="far fa-bell"></i> Notifications</span>
+
+            <span class="profile space">|</span>
+            
+            <span class="profile user-icon">
+                <a href="{% url 'mypage' %}">
+                    {% if not user.profile or user.profile.url == '/media/False'%}
+                        <i class="fas fa-user"></i>
+                    {% else %}
+                        <img class="profile_img" src="{{user.profile.url}}" alt="">
+                    {% endif %}
+                    <span class="user-nickname"> {{user.nickname}}</span>
+                </a>
+            </span>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="notifications" id="box" style="overflow-y: auto; max-height: 400px; z-index: 3">
+        <h2>Notifications</h2>
+        {% if invitedGroup %} {% for group in invitedGroup %}
+        <a class="notifications-item" href="{%url 'invitation' group.group.id %}">
+          <div class="text">
+            <h4><strong>{{group.group.name}}</strong></h4>
+            <p><strong>{{group.group.name}}</strong>에 초대되었습니다.</p>
+          </div>
+        </a>
+        {% endfor %} {% else %}
+        <div class="text">
+          <p>&nbsp&nbsp알림이 없습니다.</p>
+        </div>
+        {% endif %}
+      </div>
+    </nav>
+    {% block content %} {% endblock %}
+  </body>
+
+  <script>
+    $(document).ready(function () {
+      var down = false;
+      $('#bell').click(function (e) {
+        var color = $(this).text();
+        if (down) {
+          $('#box').css('height', '0px');
+          $('#box').css('opacity', '0');
+          down = false;
+        } else {
+          $('#box').css('height', 'auto');
+          $('#box').css('opacity', '1');
+          down = true;
+        }
+      });
+    });
+  </script>
+</html>

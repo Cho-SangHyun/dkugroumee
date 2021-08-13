@@ -1,0 +1,140 @@
+*{
+    box-sizing: border-box;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+}
+
+html, body{
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    min-width: 1400px;
+}
+
+.main-container{
+    flex: 1;
+    background-image: 
+  radial-gradient(circle at -66% 50%, #5d9dff 0%, #838de9 70%, rgb(156, 161, 241) 70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+    height: 80%;
+    background: linear-gradient(287deg, rgba(255,255,255,1) 0%, rgba(243,244,244,1) 0%, rgba(255,255,255,1) 100%);
+    border-radius: 20px;
+    -webkit-box-shadow: 27px 43px 43px -26px rgba(89,89,89,0.39);
+    -moz-box-shadow: 27px 43px 43px -26px rgba(89,89,89,0.39);
+    box-shadow: 27px 43px 43px -26px rgba(89,89,89,0.39);
+    padding: 10px;
+}
+
+.top-section, .mid-section, .bot-section{
+    width: 100%;
+}
+
+.top-section{
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.mid-section{
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bot-section{
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 00.75rem;
+    color: #222222;
+}
+
+.top-section img{
+    width: 70%;
+}
+
+.mid-section p{
+    margin-bottom: 3rem;
+    color: #222222;
+}
+
+.mid-section form{
+    width: 80%;
+}
+
+.mid-section form .form-element{
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+#id_username, #id_password{
+    width: 100%;
+    background: transparent;
+    height: 40px;
+    border: 0;
+    border-bottom: 1px solid #060b18;
+    margin-bottom: 5px;
+    outline-style: none;
+    font-size: 1.25rem;
+    font-weight: 300;;
+    padding: 0;
+}
+
+.mid-section .failed-login{
+    width: 100%;
+    height: 1rem;
+    font-size: 0.75rem;
+    text-align: end;
+    color: red;
+}
+
+.btn-login{
+    margin-top: 5px;
+    width: 100%;
+    height: 50px;
+    display: inline-block;
+    padding-bottom: 3px;
+    color: #060b18;
+    font-size: 1.25rem;
+    font-weight: 100;
+    border: 1px solid  #060b18;
+    background-color : transparent;
+}
+
+.btn-login:hover{
+    color: #838de9;
+    border: 2px solid #838de9;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mid-section .go-to-signup{
+    margin-top: 0.5rem;
+    color: #222222;
+}
+
+.mid-section .go-to-signup a{
+    color: #222222;
+    font-weight: bold;
+}
+
+.mid-section .go-to-signup a:hover{
+    color: #838de9;
+}

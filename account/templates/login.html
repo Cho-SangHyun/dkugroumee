@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Groumee</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <div class="main-container">
+        <div class="main-section">
+            <div class="top-section">
+                <img src="{% static 'images/groumeelogo.png' %}">
+            </div>
+            <div class="mid-section">
+                <p>그루미를 통해 효율적인 일정관리를 시작해보세요</p>
+                <form action="{% url 'login' %}" method="POST">{%csrf_token%}
+                    <div class="form-element">
+                        {{form.username}}
+                    </div>
+                    <div class="form-element">
+                        {{form.password}}
+                    </div>
+                    <div class="failed-login">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <i class="fas fa-exclamation-triangle"></i>{{message}}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+                    <button type="submit" class="btn-login">로그인</button>
+                </form>
+                <div class="go-to-signup">
+                    아직 그루미 계정이 없으신가요? <a href="{% url 'signup' %}">회원가입</a>
+                </div>
+            </div>
+            <div class="bot-section">
+                <span>Copyright 2021. Groumee all rights reserved.</span>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>  
+    <script src="https://kit.fontawesome.com/6584921572.js" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('#id_username').attr("placeholder", "아이디");
+            $('#id_password').attr("placeholder", "비밀번호");
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% load static %} {% block extrahead %}
+<link rel="stylesheet" href='{% static "css/usergrouplist.css" %}' />
+<title>Groumee - 내 그룹 리스트({{userGroup_list|length}})</title>
+{% endblock %} {% block content %} {% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <script>
+    alert('{{message}}');
+  </script>
+  {% endfor %}
+</ul>
+{% endif %}
+<div class="main-section">
+  <div class="groupList">
+    <div class="listTitle">
+      <div class="title_section">
+        <span class="group_icon"><i class="fas fa-user-friends"></i></span>
+        <div class="group_title">
+          <span class="mygroup">My Group</span>
+          <span class="totalNum">{{userGroup_list|length}} groups</span>
+        </div>
+      </div>
+
+      <div class="btn_wrap">
+        <button class="btn" type="button" onclick="location.href='/createGroup/'">그룹만들기</button>
+      </div>
+    </div>
+    <hr />
+
+    {%for group in userGroup_list%}
+    <a href="{%url 'groupCalendar_view' group.id%}">
+      <div class="group_wrap">
+        <span class="group_name">{{group.name}}</span>
+        {% for members in alluser_list %} {% if members.0.group == group %} <span class="member_num"> {{members|length}} people </span>
+        <br />
+        {% for member in members %} <span class="member_name"> {{member.user.nickname}} </span> {% endfor %} {% endif %} {% endfor %}
+        <br />
+      </div>
+    </a>
+    {%endfor%}
+  </div>
+</div>
+{% endblock %}

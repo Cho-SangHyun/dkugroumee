@@ -1,0 +1,213 @@
+*{
+    box-sizing: border-box;
+}
+
+html, body{
+    height: 100% !important;
+    margin: 0 !important;
+}
+
+body{
+    background-color: #dcdef3 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+table{             /* 부트스트랩 css 상쇄 */
+    caption-side: initial;
+    border-collapse: initial;
+}
+/* main-section */
+
+.main-section{
+    font-family: 'Noto Sans KR', sans-serif;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-change-section{
+    width: 70%;
+    height: 80%;
+    background: linear-gradient(287deg, rgba(255,255,255,1) 0%, rgba(243,244,244,1) 0%, rgba(255,255,255,1) 100%);
+    box-shadow: 0 0.5rem 1.6rem 0 rgb(0 0 0 / 8%);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container{
+    width: 95%;
+    height: 95%;
+    /* border: 1px solid black; */
+}
+
+.container h1{
+    margin: 0;
+    font-size: 3.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    color: #5390fe;
+}
+
+.container .change-success{
+    width: 100%;
+    height: 1.25rem;
+}
+
+.container form{
+    width: 90%;
+    height: 60%;
+    /* border: 1px solid black; */
+    margin: 0 auto;
+}
+
+.container form .nickname-and-profile{
+    width: 90%;
+    height: 45%;
+    /* border: 1px solid black; */
+    margin: 0 auto;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nickname-and-profile .point{
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+    font-size: 0.75rem;
+}
+
+.nickname-and-profile .go-change{
+    width: 10%;
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: center;
+}
+
+.go-change .btn-change{
+    width: 80%;
+    border: none;
+    color: #5390fe;
+    background-color: transparent;
+    transition: all .2s ease;
+}
+
+.go-change .btn-change:hover{
+    transform: translateY(-3px);
+}
+
+.container form .email-and-username{
+    width: 90%;
+    height: 45%;
+    /* border: 1px solid black; */
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.email-and-username .uneditable{
+    width: 45%;
+    height: 50%;
+    margin: 0 2rem;
+    /* border: 1px solid black; */
+    border: .1rem solid transparent;
+    border-radius: 1rem;
+    box-shadow: 6px 10px 11px -6px rgba(89,89,89,0.39);
+    padding: 0.75rem;
+    font-size: 1.25rem;
+    background-color: #f1f2f7;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.uneditable p{
+    color: #a9abb7;
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+.container .go-to-changePW{
+    width: 100%;
+    height: 20%;
+    margin: 0 auto;
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.go-to-changePW a{
+    color: #5390fe !important;
+    padding: 0.5rem 1rem;
+    border: 1.5px solid #5390fe;
+    border-radius: 1rem;
+    font-weight: 100;
+    transition: all .2s ease;
+}
+
+.go-to-changePW a:hover{
+    color: #fff !important;
+    background-color: #5390fe;
+    transform: translateY(-3px);
+    box-shadow: 0px 15px 20px rgba(40, 108, 230, 0.4);
+}
+
+.profile-image{
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 1rem 1.2rem 0 rgb(0 0 0 / 21%);
+    margin-right: 1rem;
+}
+
+.profile-image-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* object-position: right bottom; */
+}
+
+.nickname-zone{
+    display: flex;
+    align-items: center;
+}
+
+#id_nickname{
+    font-size: 1.75rem;
+    border: none;
+    outline-style: none;
+    font-weight: bold;
+    width: 60%;
+    background-color: transparent;
+}
+
+.edit-nickname{
+    font-size: 1rem;
+    color: #a9abb7;
+    transition: .2s all ease;
+    margin-right: 0.8rem;
+}
+
+.edit-nickname:hover{
+    color: #222222;
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+.inputs a{
+    display: none;
+}
+

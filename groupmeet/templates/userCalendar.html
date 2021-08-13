@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block extrahead %}
+<link rel="stylesheet" href='{% static "css/usercalendar.css" %}' />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+<title>Groumee</title>
+{% endblock %}
+
+{% block content %}
+
+    <div class="main-section">
+      {{calendar}}
+      <div id="Sidebar">
+        <div class="close-section">
+          <i class="fas fa-times close-Sidebar" onclick="closeSidebar()"></i>
+        </div>
+        <div class="Sidebar-head">
+          <div class="cur-date">
+            <div id="cur_day"></div>
+            <div id="cur_weekday"></div>
+          </div>
+        </div>
+        <div class="content-section">
+        </div>
+        <div class="content-add-section">
+          <!-- <i class="far fa-calendar-plus go-add-userschedule" data-bs-toggle="modal" data-bs-target="#UserScheduleModal"></i> -->
+          <button class="go-add-userschedule" type="button" data-bs-toggle="modal" data-bs-target="#UserScheduleModal">+ 일정 추가하기</button>
+        </div>
+      </div>
+
+      <div class="modal fade" id="UserScheduleModal" tabindex="-1" aria-labelledby="UserScheduleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header group-modal">
+              <h5 class="modal-title" id="UserScheduleModalLabel"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body modal-body-wrapper group-modal">
+              <form id="userschedule-form">{% csrf_token %}
+                <div class="start-time">
+                  <span>시작시간 </span>{{form.start_date}} {{form.start_hour}} {{form.start_minute}}
+                </div>
+                <ul id="form-start-error"></ul>
+                <div class="end-time">
+                  <span>종료시간 </span>{{form.end_date}} {{form.end_hour}} {{form.end_minute}}
+                </div>
+                <ul id="form-end-error"></ul>
+                <span>일정이름 </span>{{form.title}}<br>
+                <ul id="form-title-error"></ul>
+                <span>색깔지정 </span>{{form.color}}
+              </form>
+            </div>
+            <div class="btn-wrapper group-modal">
+              <button type="button" class="btn save-btn"></button>
+              <button type="button" class="btn cancel-btn" data-bs-dismiss="modal">취소</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      let cur_year = '{{cur_year}}';
+      let cur_month = '{{cur_month}}';
+      let prev_month = '{{prev_month}}';
+      let next_month = '{{next_month}}';
+      let csrf_token = '{{csrf_token}}';
+
+      let show_userschedule_url = '{% url "show-userschedule" %}';
+      let create_userschedule_url = '{% url "create-userschedule" %}';
+      let delete_userschedule_url = '{% url "delete-userschedule" %}';
+      let userCalendar_view_url = "{% url 'userCalendar_view' %}";
+      
+    </script>
+    <script src="{%static 'js/usercalendar.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    {% endblock %}

@@ -1,0 +1,151 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+body {
+  background-color: #dcdef3 !important;
+}
+
+table {
+  /* 부트스트랩 css 상쇄 */
+  caption-side: initial;
+  border-collapse: initial;
+}
+
+/* main-section */
+
+.main-section {
+  font-family: 'Noto Sans KR', sans-serif;
+  height: 100%;
+  margin-top: 1rem;
+  width: 100%;
+  /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.main-section h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 2rem !important;
+  color: #3849aa !important;
+  line-height: 2.5rem;
+  padding-top: 0 !important;
+  padding-bottom: 1rem !important;
+  font-weight: 600;
+}
+
+.groupList {
+  width: 35vw;
+  font-size: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  background: #fff;
+  border-radius: 1em 1em 1em 1em;
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2), 1px 1px 1px 1px #fff;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2), 1px 1px 1px 1px #fff;
+  color: #555;
+  text-align: center;
+  border-spacing: 0px;
+}
+
+.groupList a {
+  color: black !important;
+}
+
+.listTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group_icon {
+  font-size: 2rem;
+  padding: 0.3rem 0.5rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+  background: #f1f4ff;
+  color: #4555e6;
+}
+
+.title_section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.group_title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mygroup {
+  font-size: 1.5rem;
+  color: #3849aa;
+  font-weight: 600;
+}
+
+.totalNum {
+  color: gray;
+}
+
+.btn_wrap {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn {
+  border-radius: 25px;
+  background: #88b2f1;
+  color: white;
+  font-weight: 500;
+  padding: 8px 14px 7px 14px;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  outline: none;
+  appearance: auto;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #679cec;
+  color: white;
+}
+
+.group_wrap {
+  width: 80%;
+  height: auto;
+  margin: auto;
+  text-align: left;
+  padding: 1rem;
+  border-radius: 20px;
+  transition: transform 250ms;
+}
+
+.group_wrap:hover,
+.group_wrap:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em gray;
+  transform: translateY(-0.25em);
+  background: #fafafa;
+}
+
+.group_name {
+  font-size: 1.5rem;
+}
+
+.member_num {
+  color: gray;
+}

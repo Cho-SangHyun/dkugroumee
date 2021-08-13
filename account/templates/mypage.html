@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href='{% static "css/mypage.css" %}' />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+<link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+<title>Groumee - 마이페이지</title>
+
+{% endblock %}
+
+{% block content %}
+<body></body>
+<div class="main-section">
+    <div class="account-change-section">
+        <div class="container">
+            <h1>MY PAGE</h1>
+            <div class="change-success">
+                {% for message in messages %}
+                <i class="fas fa-check"></i> {{ message.message }}
+                {% endfor %}
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="nickname-and-profile">
+                    <div class="point">
+                        {% if user.profile %}
+                            {% if user.profile.url == '/media/False' %}
+                                <div class="profile-image">
+                                    <img class="profile-image-img" src="{% static 'img/baseprofile.png' %}">
+                                </div>
+                            {% else %}
+                                <div class="profile-image">
+                                    <img class="profile-image-img" src="{{user.profile.url}}">
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="profile-image">
+                                <img class="profile-image-img" src="{% static 'img/baseprofile.png' %}">
+                            </div>
+                        {% endif %}
+                        
+                        <div class="inputs">
+                            <div class="nickname-zone"><i class="fas fa-edit edit-nickname"></i>{{form.nickname}}</div>
+                            {{form.profile}}
+                        </div>
+                    </div>
+                    <div class="go-change">
+                        <button type="submit" class="btn-change">변경</button>
+                    </div>
+                </div>
+                <div class="email-and-username">
+                    <div class="uneditable">
+                        <p>아이디</p>
+                        {{userinfo.username}}
+                    </div>
+                    <div class="uneditable">
+                        <p>이메일</p>
+                        {{userinfo.email}}
+                    </div>
+                </div>
+            </form>
+            <div class="go-to-changePW">
+                <a href="{% url 'changepw' %}">비밀번호 변경</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function(){
+        const target = document.getElementById('id_nickname');
+        target.readOnly = true;
+    })
+
+    $('.edit-nickname').click(function(){
+        const target = document.getElementById('id_nickname');
+        target.readOnly = false;
+        document.getElementById('id_nickname').focus();
+    })
+</script>
+{% endblock %}

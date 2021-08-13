@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Groumee - 회원가입</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <div class="main-container">
+        <div class="main-section">
+            <div class="top-section">
+                <img src="{% static 'images/groumeelogo.png' %}">
+            </div>
+            <div class="mid-section">
+                <form action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">{%csrf_token%}
+                    <div class="form-element">
+                        {{form.username}}
+                    </div>
+                    <div class="error-field">
+                        {% if form.username.errors %}
+                            {% for error in form.username.errors %}
+                                {{error}}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-element">
+                        {{form.nickname}}
+                    </div>
+                    <div class="error-field">
+                        {% if form.nickname.errors %}
+                            {% for error in form.nickname.errors %}
+                                {{error}}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-element">
+                        {{form.email}}
+                    </div>
+                    <div class="error-field"></div>
+                    <div class="form-element">
+                        {{form.password1}}
+                    </div>
+                    <div class="error-field"></div>
+                    <div class="form-element">
+                        {{form.password2}}
+                    </div>
+                    <div class="error-field" id="password2-error-field">
+                        {% if form.password2.errors %}
+                            {% for error in form.password2.errors %}
+                                {{error}}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="form-element profile-upload">
+                        {{form.profile}} <span class="profile_guide"><i class="fas fa-exclamation-circle"></i> 프로필 사진은 선택사항입니다.</span>
+                    </div>
+                    <div class="error-field"></div>
+                    <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+                    <button type="submit" class="btn-signup">회원가입</button>
+                </form>
+            </div>
+            <div class="bot-section">
+                <span>Copyright 2021. Groumee all rights reserved.</span>
+            </div>
+        </div>
+    </div>  
+    <script src="https://kit.fontawesome.com/6584921572.js" crossorigin="anonymous"></script>
+</body>
+</html>

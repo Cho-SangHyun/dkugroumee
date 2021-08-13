@@ -1,0 +1,184 @@
+{% extends 'base.html' %} {% load static %} {% block extrahead %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href='{% static "css/creategroup.css" %}' />
+<title>Groumee - 새 그룹 생성</title>
+{% endblock %} {% block content %} {% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+<div class="main-section">
+  <div class="inviteSection">
+    <form>
+      {% csrf_token %}
+
+      <div class="invite-wrapper">
+        <label for="inputPassword3" class="col-form-label"
+          ><i class="fas fa-user-tag"></i> <span class="invite-title"> 그룹이름</span></label
+        >
+        <input name="name" type="text" class="form-control group-name" id="inputPassword3" required />
+      </div>
+      <ul id="form-name-error"></ul>
+
+      <div class="invite-wrapper">
+        <fieldset class="">
+          <legend class="col-form-label">
+            <i class="fas fa-user-friends"></i> <span class="invite-title"> 초대멤버</span>
+            <button
+              class="btn search-btn"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseExample"
+              aria-expanded="false"
+              aria-controls="collapseExample"
+            >
+              검색하기 <i class="fas fa-search"></i>
+            </button>
+          </legend>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <div class="row justify-content-md search-wrapper">
+                <div class="">
+                  <input class="form-control" id="searchUser" type="text" placeholder="Search" onkeyup="filter()" />
+                </div>
+              </div>
+
+              <table class="table search-table">
+                <tbody>
+                  {% if userList %} {% for user in userList %}
+                  <tr class="userList" style="display: none">
+                    <td class="nickName" style="border: none">
+                      <div class="result-user">
+                        {% if not user.profile or user.profile.url == '/media/False'%}
+                        <i class="fas fa-user"></i>
+                        {% else %}
+                        <img class="profile_img" style="width: 35px; height: 35px; border-radius: 50%" src="{{user.profile.url}}" alt="" />
+                        {% endif %}
+                        <span class="user-name">{{user.nickname}}</span>
+                        <button type="button" name="{{user.nickname}}" class="btn plus-btn" onclick="addUser(this)">
+                          추가 <i class="fas fa-plus-circle"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %} {% endif%}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="" id="checkboxArea"></div>
+        </fieldset>
+      </div>
+      <ul id="form-members-error"></ul>
+      <div class="d-grid d-md-flex justify-content-md-center">
+        <button class="btn invite-btn" type="button">그룹 초대하기</button>
+        <button class="btn cancel-btn" type="button" onclick="location.href={% url 'getuserGroupList' %}">취소</button>
+      </div>
+    </form>
+  </div>
+  <!-- inviteSection 끝 -->
+</div>
+
+<script>
+  function filter() {
+    let searchUser = document.getElementById('searchUser').value.toLowerCase();
+    let userList = document.getElementsByClassName('userList');
+    for (let i = 0; i < userList.length; i++) {
+      nickName = userList[i].getElementsByClassName('user-name');
+      if (searchUser != '' && nickName[0].innerHTML.toLowerCase().includes(searchUser)) {
+        userList[i].style.display = '';
+      } else {
+        userList[i].style.display = 'none';
+      }
+    }
+  }
+
+  function addUser(button) {
+    let checkboxArea = document.getElementById('checkboxArea');
+    let checkList = document.getElementsByClassName('checkbox');
+    let newDiv = document.createElement('div');
+    newDiv.setAttribute('class', 'form-check');
+    let checkListData = [];
+    for (let i = 0; i < checkList.length; i++) {
+      checkListData.push(checkList[i].value);
+    }
+    if (!checkListData.includes(button.name)) {
+      newDiv.innerHTML = `<input name="members[]" class="form-check-input checkbox" type="checkbox" value="${button.name}" id="gridCheck1" checked/> <label class="form-check-label" for="gridCheck1"> ${button.name} </label>`;
+      checkboxArea.appendChild(newDiv);
+    }
+  }
+
+  $(document).ready(function () {
+    $('.group-name').focus(function () {
+      $('#form-name-error').empty();
+    });
+
+    $('.plus-btn').focus(function () {
+      $('#form-members-error').empty();
+    });
+
+    $('.form-check-input').focus(function () {
+      $('#form-members-error').empty();
+    });
+
+    $(document).on('change', '.form-check-input', function () {
+      if ($('.form-check-input').is(':checked')) {
+        $('#form-members-error').empty();
+      }
+    });
+
+    $(document).on('click', '.invite-btn', function () {
+      $('form ul').empty(); // 오류메시지 출력하는 부분 비우기
+      const new_group_name = $('#inputPassword3').val();
+      let new_group_members = [];
+      $('.form-check-input').each(function (index) {
+        //index는 순서
+        if ($(this).is(':checked')) {
+          new_group_members.push($(this).val());
+        }
+      });
+      const csrf = document.getElementsByName('csrfmiddlewaretoken');
+      let csrf_token = '{{csrf_token}}';
+      const fd = new FormData();
+
+      fd.append('csrfmiddlewaretoken', csrf[0].value);
+      fd.append('new_group_name', new_group_name);
+      fd.append('new_group_members', new_group_members);
+      // 입력한 폼 데이터들을 전부 fd란 변수에 담아서 ajax통신
+
+      $.ajax({
+        url: "{% url 'groupInvite' %}",
+        type: 'POST',
+        headers: {
+          'X-CSRFTOKEN': '{{csrf_token}}',
+        },
+        data: fd,
+        success: function (data) {
+          if (data['result'] === 'success') {
+            // 작성한 폼이 유효했다면
+            location.href = "{% url 'getuserGroupList' %}";
+          } else {
+            // 작성한 폼이 유효 X -> 에러메시지 출력
+            errors = data['error_messages'];
+            console.log(errors.length);
+            for (let i = 0; i < errors.length; i++) {
+              let error_message = '<li>' + errors[i]['error_content'] + '</li>';
+              let error_field = errors[i]['error_type'];
+              $("ul[id*='" + error_field + "']").append(error_message);
+            }
+          }
+        },
+        error: function () {
+          alert('그룹 생성에 실패했습니다');
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+      });
+    });
+  });
+</script>
+{% endblock %}

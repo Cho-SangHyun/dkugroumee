@@ -1,0 +1,429 @@
+{% extends 'base.html' %} {% load static %} {% block extrahead %}
+<link rel="stylesheet" href='{% static "css/groupcalendar.css" %}' />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+<title>Groumee - {{group.name}}</title>
+{% endblock %} {% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <script> alert('{{message}}'); </script>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="main-section">
+  <div class="left-section">
+    <div class="sidebar-overlay"></div>
+    <div class="sidebar">
+      <div class="sidebar-top">
+        <i class="fas fa-times close-sidebar"></i>
+      </div>
+      <div class="sidebar-mid">
+        <div class="ok-members">
+          <i class="fas fa-users"></i> 그룹 멤버
+          <div class="members-list">
+            {% for member in members %}
+             {{member.nickname}}<br />
+            {% endfor %}
+          </div>
+        </div>
+        <div class="waiting-members">
+          <i class="fas fa-spinner"></i> 아직 오지 않은 멤버
+          <div class="members-list">
+            {% for member in waiting_members %}
+             {{member.nickname}}<br />
+            {% endfor %}
+          </div>
+        </div>
+        <div class="nono-members">
+          <i class="far fa-thumbs-down"></i> 초대를 거절한 멤버
+          <div class="members-list">
+            {% for member in nono_members %}
+             {{member.nickname}}<br />
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-bot">
+        <span id="edit-group"></span><a id="edit-group" href="{% url 'editGroup' group.id %}"> 그룹 수정<i class="fas fa-cog"></i>&nbsp;&nbsp;</a></span>
+        <span id="leave-group">나가기 <i class="fas fa-sign-out-alt"></i></span>
+      </div>
+    </div>
+    <div id="top">
+      <span><i class="fas fa-bars open-sidebar"></i></span>
+      <div class="group-name"> {{group.name}} </div>
+    </div>
+
+    {{calendar}}
+    <div class="calendar-info">
+      <div class="empty-box">&nbsp;</div>
+      &nbsp;: 스케줄 있음
+    </div>
+  </div>
+
+  <div class="right-section">
+
+    <div class="today">
+      {%if date%}
+      {{date.0}}.{{date.1}}.{{date.2}}
+      {%endif%}
+    </div>
+
+    <div class="table-section">
+      <div class="table-content">
+        <table class="time-table">
+          <tbody>
+            {% for test in groupschedules %} {% endfor %} {% for time , value in schedule_list.items %}
+            <tr>
+              <th rowspan="2">{{time}}</th>
+              {% if value.0 == 0 %}
+              <td id="selectTime" data-bs-toggle="modal" data-bs-target="#addScheduleModal" data-hour="{{time}}" data-minute="00"></td>
+              {% elif value.0 == -1 %}
+              <td style="background-color: #eee"></td>
+              {% else %}
+              <td
+                style="background-color: #dcdef3"
+                id="groupSchedule"
+                data-bs-toggle="modal"
+                data-bs-target="#groupScheduleModal"
+                data-title="{{value.0.title}}"
+                data-start="{{value.0.start}}"
+                data-end="{{value.0.end}}"
+                data-id="{{value.0.id}}"
+              ></td>
+              {% endif %}
+            </tr>
+            <tr>
+              {% if value.1 == 0 %}
+              <td id="selectTime" data-bs-toggle="modal" data-bs-target="#addScheduleModal" data-hour="{{time}}" data-minute="30"></td>
+              {% elif value.1 == -1 %}
+              <td style="background-color: #eee"></td>
+              {% else %}
+              <td
+                style="background-color: #dcdef3"
+                id="groupSchedule"
+                data-bs-toggle="modal"
+                data-bs-target="#groupScheduleModal"
+                data-title="{{value.1.title}}"
+                data-start="{{value.1.start}}"
+                data-end="{{value.1.end}}"
+                data-id="{{value.1.id}}"
+              ></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="chat-box">
+  <form action="{%url 'addComment' group.id%}" method="POST">
+    {% csrf_token %}
+  <div class="input-group" style="height: 50px;">
+    <input class="form-control border no-shadow no-rounded" name="content" placeholder="Type your message here">
+    <input type="submit" style="border-radius: 5px; background:#88b2f1; border:none ;" value="Send"></input>
+  </form>
+  </div>
+</div>  
+
+
+<div class="container content">
+  <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body height3">
+            <ul class="chat-list">
+              {% for comment in comment_list %}
+              {% if comment.writer == request.user%}
+                <li class="out">  
+                  <div class="chat-body">
+                    <div class="chat-message">
+                      <h5>{{comment.writer.nickname}}</h5>
+                      <p>{{comment.content}}</p>
+                      <div class="comment_date">{{comment.pub_date|date:'Y-d-m fa' }}</div>
+                      <div class="close-container">
+                        <a href="{%url 'delComment' group.id comment.id %}">
+                          <div class="leftright"></div>
+                          <div class="rightleft"></div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              {%else%}
+                <li class="in">
+                  <div class="chat-body">
+                    {% if not comment.writer.profile or comment.writer.profile.url == '/media/False'%}
+                    <i class="fas fa-user"></i>
+                    {% else %}
+                    <img class="profile_img" style="width:35px; height:35px; border-radius:50%;" src="{{comment.writer.profile.url}}" alt="">
+                    {% endif %}
+                    <div class="chat-message">
+                      <h5>{{comment.writer.nickname}}</h5>
+                      <p>{{comment.content}}</p>
+                      <div class="comment_date">{{comment.pub_date|date:'Y-d-m fa' }}</div>
+                    </div>
+                  </div>
+                </li>
+            {%endif%}
+            {%endfor%}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header group-modal">
+        <h5 class="modal-title" id="addScheduleModalLabel"><i class="fas fa-user-plus"></i> 그룹 일정 추가</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body modal-body-wrapper group-modal">
+        <form>
+          {% csrf_token %}
+          <span class="sub-title"><i class="far fa-calendar-alt"></i> 일정 시작</span>
+          {{form.start_date}}
+          {{form.start_hour}}
+          <span class="sub-title">시</span>
+
+          {{form.start_minute}}
+          <span class="sub-title">분</span>
+          <ul id="form-start-error"></ul>
+
+          <span class="sub-title"><i class="far fa-calendar-alt"></i> 일정 끝</span>
+          {{form.end_date}}
+          {{form.end_hour}}
+          <span class="sub-title">시</span>
+
+          {{form.end_minute}}
+          <span class="sub-title">분</span>
+          <ul id="form-end-error"></ul>
+
+          <span class="sub-title"><i class="fas fa-pen"></i> 일정명</span>
+          {{form.title}}
+          <ul id="form-title-error"></ul>
+      </div>
+      <div class="btn-wrapper group-modal">
+        <button type="button" class="btn save-btn" id="create-groupschedule">저장 <i class="fas fa-check"></i></button>
+        <button type="button" class="btn cancel-btn" data-bs-dismiss="modal">취소 <i class="fas fa-times"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="groupScheduleModal" tabindex="-1" aria-labelledby="groupScheduleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header group-modal">
+        <h5 class="modal-title" id="groupScheduleModalLabel"><span id="name"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body modal-body-wrapper group-modal">
+        <p><i class="far fa-calendar-alt"></i> 일정 시작 <span id="start"></span> </p>
+        <p><i class="far fa-calendar-alt"></i> 일정 끝 <span id="end"></span></p>
+      </div>
+      <div class="btn-wrapper group-modal">
+        <button type="button" id="addSchedule" class="btn save-btn">내 캘린더에 추가하기</button>
+        <button type="button" id="deleteSchedule" class="btn cancel-btn">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="noselect" id="mybtn" onclick="topFunction()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z" />
+  </svg>
+</button>
+
+<footer style="margin-bottom: 50px"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+  function go_prev_month() {
+    location.href = "{%url 'groupCalendar_view' group.id%}?{{prev_month}}";
+  }
+
+  function go_next_month() {
+    location.href = "{%url 'groupCalendar_view' group.id%}?{{next_month}}";
+  }
+
+  function view_day_schedule(self) {
+    var url_str = "{%url 'groupCalendar_view' group.id%}?{{cur_month}}&day=" + self.innerText;
+    location.href = url_str;
+  }
+
+  $(document).on('click', '#selectTime', function () {
+    $('form ul').empty();
+    $('#id_title').val('');
+    var selectedHour = $(this).data('hour')
+    var selectedMinute = $(this).data('minute')
+    $('.modal-body #id_start_hour').val(selectedHour);
+    $('.modal-body #id_start_minute').val(selectedMinute);
+  });
+
+  $(document).on('click', '#groupSchedule', function () {
+    var id = $(this).data('id');
+    var title = $(this).data('title');
+    var start = $(this).data('start');
+    var end = $(this).data('end');
+    console.log(id);
+    document.getElementById('name').innerHTML = title;
+    document.getElementById('start').innerHTML = start;
+    document.getElementById('end').innerHTML = end;
+    document.getElementById('addSchedule').onclick = function () {
+      location.href = '/addschedule/' + id;
+    };
+    document.getElementById('deleteSchedule').onclick = function () {
+      location.href = '/deleteschedule/' + id;
+    };
+  });
+
+  var btn = $('#mybtn');
+  $(window).scroll(function () {
+    if ($(window).scrollTop() > 20) {
+      btn.addClass('show');
+    } else {
+      btn.removeClass('show');
+    }
+  });
+
+  btn.on('click', function (e) {
+    e.preventDefault();
+    $('html, body').animate({
+      scrollTop: 0
+    }, '20');
+  });
+
+  $(document).on('click', '.open-sidebar', function () { // 사이드바 열기
+    $('.sidebar').css('left', '0');
+    $('.sidebar-overlay').css('display', 'flex');
+    $('.main-section').on('scroll touchmove mousewheel', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    });
+  });
+
+  $(document).on('click', '.close-sidebar', function () { // 사이드바 닫기
+    $('.sidebar').css('left', '-20vw');
+    setTimeout(function () {
+      $('.sidebar-overlay').css('display', 'none');
+    }, 400);
+    $('.main-section').off('scroll touchmove mousewheel');
+  });
+
+  // $(document).on('click', '#leave-group', function () { // 그룹 탈퇴
+  //   let result = confirm("정말 이 그룹에서 나가시겠습니까?");
+  //   if (result) {
+  //     alert("이 그룹에서 나갔습니다");
+  //     location.href = "{% url 'leaveGroup' group.id %}"
+  //   } else {
+  //     ;
+  //   }
+  // });
+
+  $(document).on('click', '#leave-group', function () {
+    Swal.fire({
+      title: '이 그룹에서 나가시겠습니까?',
+      text: "그룹을 나가시면 다시 참여하실 수 없습니다.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#42a5f5',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: '그룹에서 나갔습니다.',
+          text: "새로운 그룹에 참여해 보세요.",
+          icon: 'success'
+        }).then((result2) => {
+          if (result2.isConfirmed){
+            location.href = "{% url 'leaveGroup' group.id %}"
+          }
+        })
+      }
+    })
+  });
+
+  $('#id_start_date').val("{{date.0}}-{{date.1}}-{{date.2}}");
+  $('#id_start_date').attr("min", "{{date.0}}-{{date.1}}-{{date.2}}");
+  $('#id_start_date').attr("max", "{{date.0|add:'1'}}-{{date.1}}-{{date.2}}");
+  $('#id_start_date').attr("readonly", "true");
+
+  $('#id_end_date').val("{{date.0}}-{{date.1}}-{{date.2}}");
+  $('#id_end_date').attr("min", "{{date.0}}-{{date.1}}-{{date.2}}");
+  $('#id_end_date').attr("max", "{{date.0|add:'1'}}-{{date.1}}-{{date.2}}");
+
+  $(document).on("click", "#create-groupschedule", function(){          // 모달창에서 생성버튼을 누르면 이하 내용 실행
+    const start_date = document.getElementById("id_start_date").value;
+    const start_hour = $("#id_start_hour option:selected").val();
+    const start_minute = $("#id_start_minute option:selected").val();
+    const end_date = document.getElementById("id_end_date").value;
+    const end_hour = $("#id_end_hour option:selected").val();
+    const end_minute = $("#id_end_minute option:selected").val();
+    const title = document.getElementById("id_title").value;
+    const csrf = document.getElementsByName('csrfmiddlewaretoken');
+
+    const fd = new FormData();
+
+    fd.append('csrfmiddlewaretoken', csrf[0].value);
+    fd.append('start_date', start_date);
+    fd.append('start_hour', start_hour);
+    fd.append('start_minute', start_minute);
+    fd.append('end_date', end_date);
+    fd.append('end_hour', end_hour);
+    fd.append('end_minute', end_minute);
+    fd.append('title', title);                                    // 폼에 입력한 값들을 fd라는 변수에 담아서 ajax통신
+    
+    $.ajax({
+      url : "{% url 'createGroupSchedule' group.id %}",
+      type : 'POST',
+      headers : {
+        'X-CSRFTOKEN' : '{{csrf_token}}'
+      },
+      data : fd,
+      success:function(data){
+
+        if(data['result'] === "success"){                   // 작성한 폼이 유효했다면 redirect
+          setTimeout(function() {
+            location.href = "";
+          }, 300);
+        }
+        else{                                               // 작성한 폼이 유효 X -> 에러메시지 출력
+          form_errors = JSON.parse(data['form_errors']);    // json형태의 데이터를 js객체형태로 바꿈
+          
+          $('form ul').empty();               // 오류 메시지 출력되는 부분 비우기
+          
+          $.each(form_errors, function(i, value){           // 2중 반복문을 돌며 오류 메시지 각 영역에 채우기
+            $.each(value, function(j, message){
+              let error_message = '<li>' + value[j]['message'] + '</li>';
+              let error_field = i.split('_')[0]
+              $("ul[id*='" + error_field +"']").append(error_message);
+            });
+          });
+        }
+
+      },
+      error:function(){
+        alert("일정을 생성하는데 실패했습니다");
+      },
+      cache : false,
+      contentType: false,
+      processData: false
+
+    });
+
+  });
+</script>
+
+{% endblock %}
