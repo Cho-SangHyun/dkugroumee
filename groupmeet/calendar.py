@@ -1,5 +1,5 @@
 from calendar import HTMLCalendar, weekday
-from .models import Schedule, GroupSchedule
+from .models import Schedule, GroupSchedule, UserGroup
 import datetime
 import calendar
 
@@ -34,9 +34,11 @@ class Calendar(HTMLCalendar):
             group_schedules = GroupSchedule.objects.filter(group=group, start__date__lte=date, end__date__gte=date) # 이 그룹의 그룹스케줄 중 이 날 있는 스케줄들을 담음
             all_members_schedules = []            # 그룹의 모든 구성원들의 개인스케줄들 중에서, 이 날에 있는 스케줄들만 담을 리스트
             for member in group.members.all():
-                member_schedule = Schedule.objects.filter(user=member, start__date__lte=date, end__date__gte=date) # 시작일이 date보다 작거나 같고, 종료일에 date보다 크거나 같은 애들 필터링
-                member_schedule = member_schedule.exclude(end__lte=min_datetime)                                   # 그 중에서 date날짜의 9시 전에 끝나는 일정 제외
-                all_members_schedules += member_schedule
+                ug = UserGroup(user=member)
+                if ug.allowed == 2:
+                    member_schedule = Schedule.objects.filter(user=member, start__date__lte=date, end__date__gte=date) # 시작일이 date보다 작거나 같고, 종료일에 date보다 크거나 같은 애들 필터링
+                    member_schedule = member_schedule.exclude(end__lte=min_datetime)                                   # 그 중에서 date날짜의 9시 전에 끝나는 일정 제외
+                    all_members_schedules += member_schedule
 
             if all_members_schedules or group_schedules:      # 그 날에 어떠한 스케줄(그룹스케줄이던 개인스케줄이던)이라도 있으면
                 return f"<td class='date is_schedule' onclick='view_day_schedule(this);'>" + f"{day}</td>"
